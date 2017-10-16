@@ -13,16 +13,6 @@
 void  ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	auto ControlledTank = GetControlledTank();
-
-	if (!ControlledTank)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("You've got no tank!"))
-	}
-	else 
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Your tank name is %s"), *ControlledTank->GetName())
-	}
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
