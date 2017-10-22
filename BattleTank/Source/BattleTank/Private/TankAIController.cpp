@@ -6,6 +6,8 @@
 #include "Public/TankAimingComponent.h"
 #include "Classes/Engine/World.h"
 #include "Classes/AIController.h"
+#include "Tank.h"
+#include "Classes/GameFramework/Pawn.h"
 #include "Classes/GameFramework/Character.h"
 
 
@@ -14,6 +16,23 @@ void  ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
+}
+
+void ATankAIController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (InPawn)
+	{
+		auto PossesedTank = Cast<ATank>(InPawn); 
+		if (!ensure(PossesedTank)) { return; }
+		PossesedTank->OnDeath.AddUniqueDynamic(this, &ATankAIController::OnPossessedTankDeath);
+	}
+}
+
+void ATankAIController::OnPossessedTankDeath()
+{
+	if (!GetPawn()) { return; }
+	GetPawn()->DetachFromControllerPendingDestroy();
 }
 
 void ATankAIController::Tick(float DeltaTime)
@@ -38,6 +57,8 @@ void ATankAIController::Tick(float DeltaTime)
 		AimingComponent->Fire(); //TODO Limit firing rate
 	}
 }
+
+
 
 
 
